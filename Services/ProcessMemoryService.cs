@@ -13,16 +13,21 @@ public sealed class ProcessMemoryService
         {
             try
             {
+                var rawName = process.ProcessName;
+                var name = string.IsNullOrWhiteSpace(rawName)
+                    ? "Sistema"
+                    : (rawName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? rawName : rawName + ".exe");
+
                 list.Add(new ProcessMemoryItem(
                     process.Id,
-                    process.ProcessName + ".exe",
+                    name,
                     process.WorkingSet64,
                     process.PrivateMemorySize64,
                     process.Responding ? "Activo" : "Sin responder"));
             }
             catch
             {
-                // Procesos protegidos pueden negar acceso. Se omiten sin bloquear el monitor.
+                // Procesos del sistema protegidos por Windows (System, Registry, etc.) se omiten de forma segura.
             }
             finally
             {

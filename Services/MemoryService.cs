@@ -12,9 +12,7 @@ public sealed class MemoryService : IDisposable
 
     private readonly object _sync = new();
     private nint _query;
-    private nint _standbyReserve;
-    private nint _standbyNormal;
-    private nint _standbyCore;
+    private readonly List<nint> _counters = new();
     private bool _pdhReady;
 
     public MemoryService()
@@ -70,12 +68,22 @@ public sealed class MemoryService : IDisposable
         if (NativeMethods.PdhOpenQuery(null, 0, out _query) != ERROR_SUCCESS)
             return;
 
-        var ok =
-            NativeMethods.PdhAddEnglishCounter(_query, @"\Memory\Standby Cache Reserve Bytes", 0, out _standbyReserve) == ERROR_SUCCESS &&
-            NativeMethods.PdhAddEnglishCounter(_query, @"\Memory\Standby Cache Normal Priority Bytes", 0, out _standbyNormal) == ERROR_SUCCESS &&
-            NativeMethods.PdhAddEnglishCounter(_query, @"\Memory\Standby Cache Core Bytes", 0, out _standbyCore) == ERROR_SUCCESS;
+        var paths = new[]
+        {
+            @"\Memory\Standby Cache Reserve Bytes",
+            @"\Memory\Standby Cache Normal Priority Bytes",
+            @"\Memory\Standby Cache Core Bytes"
+        };
 
-        _pdhReady = ok;
+        foreach (var path in paths)
+        {
+            if (NativeMethods.PdhAddEnglishCounter(_query, path, 0, out var counter) == ERROR_SUCCESS)
+            {
+                _counters.Add(counter);
+            }
+        }
+
+        _pdhReady = _counters.Count > 0;
         if (_pdhReady)
             NativeMethods.PdhCollectQueryData(_query);
     }
@@ -90,7 +98,12 @@ public sealed class MemoryService : IDisposable
             if (NativeMethods.PdhCollectQueryData(_query) != ERROR_SUCCESS)
                 return 0;
 
-            return ReadCounter(_standbyReserve) + ReadCounter(_standbyNormal) + ReadCounter(_standbyCore);
+            ulong total = 0;
+            foreach (var counter in _counters)
+            {
+                total += ReadCounter(counter);
+            }
+            return total;
         }
     }
 
