@@ -30,12 +30,18 @@ public sealed class MemoryService : IDisposable
         if (!NativeMethods.GlobalMemoryStatusEx(ref memory))
             throw new Win32Exception(Marshal.GetLastWin32Error());
 
+        ulong installedBytes = memory.ullTotalPhys;
+        if (NativeMethods.GetPhysicallyInstalledSystemMemory(out var installedKb))
+        {
+            installedBytes = installedKb * 1024;
+        }
+
         var total = memory.ullTotalPhys;
         var available = memory.ullAvailPhys;
         var used = total > available ? total - available : 0;
         var standby = ReadStandbyBytes();
 
-        return new MemorySnapshot(total, used, available, standby, DateTimeOffset.Now);
+        return new MemorySnapshot(installedBytes, total, used, available, standby, DateTimeOffset.Now);
     }
 
     public CleanResult PurgeStandby()

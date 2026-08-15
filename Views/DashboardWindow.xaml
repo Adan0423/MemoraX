@@ -36,7 +36,7 @@
             <Button Grid.Column="1" Click="Clean_Click" Background="#0EA5E9" Foreground="White" Padding="12,5" CornerRadius="8" FontWeight="SemiBold" FontSize="11">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <TextBlock Text="🧹" FontSize="11"/>
-                    <TextBlock Text="Limpiar" VerticalAlignment="Center"/>
+                    <TextBlock Text="Limpiar Standby" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
@@ -63,7 +63,7 @@
                                         <TextBlock Text="💻" FontSize="10"/>
                                         <TextBlock Text="RAM TOTAL" FontSize="9" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind ViewModel.TotalRam, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                    <TextBlock Text="{x:Bind ViewModel.TotalRam, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC"/>
                                 </StackPanel>
                             </Border>
 
@@ -73,7 +73,7 @@
                                         <TextBlock Text="📈" FontSize="10"/>
                                         <TextBlock Text="EN USO" FontSize="9" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind ViewModel.UsedRam, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                    <TextBlock Text="{x:Bind ViewModel.UsedRam, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC"/>
                                 </StackPanel>
                             </Border>
 
@@ -83,7 +83,7 @@
                                         <TextBlock Text="✅" FontSize="10"/>
                                         <TextBlock Text="DISPONIBLE" FontSize="9" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind ViewModel.AvailableRam, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#42D392"/>
+                                    <TextBlock Text="{x:Bind ViewModel.AvailableRam, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#42D392"/>
                                 </StackPanel>
                             </Border>
 
@@ -98,7 +98,7 @@
                                             <TextBlock Text="⚡" FontSize="10"/>
                                             <TextBlock Text="STANDBY MEMORY" FontSize="9" FontWeight="Bold" Foreground="#38BDF8"/>
                                         </StackPanel>
-                                        <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#38BDF8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#38BDF8"/>
                                     </StackPanel>
                                     <Border Grid.Column="1" Background="#1E3A8A" CornerRadius="5" Padding="5,2" VerticalAlignment="Center">
                                         <TextBlock Text="{x:Bind ViewModel.StandbyPercent, Mode=OneWay}" FontSize="10" FontWeight="Bold" Foreground="#60A5FA"/>
@@ -217,7 +217,46 @@
             <TabViewItem Header="🌡️ Hardware">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Spacing="8" Padding="2,6,2,10">
-                        <TextBlock Text="Detalle de Sensores y Componentes" FontSize="14" FontWeight="SemiBold" Foreground="#F8FAFC" />
+                        <TextBlock Text="Detalle de Especificaciones y Sensores" FontSize="14" FontWeight="SemiBold" Foreground="#F8FAFC" />
+
+                        <!-- System Hardware Overview Grid -->
+                        <Grid ColumnSpacing="6" RowSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="🔲 PROCESADOR" FontSize="9" FontWeight="Bold" Foreground="#94A3B8"/>
+                                    <TextBlock Text="{x:Bind ViewModel.CpuName, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="📟 RAM INSTALADA" FontSize="9" FontWeight="Bold" Foreground="#94A3B8"/>
+                                    <TextBlock Text="{x:Bind ViewModel.InstalledRam, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="🎮 TARJETA GRÁFICA" FontSize="9" FontWeight="Bold" Foreground="#94A3B8"/>
+                                    <TextBlock Text="{x:Bind ViewModel.GpuName, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="3" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="💾 ALMACENAMIENTO" FontSize="9" FontWeight="Bold" Foreground="#94A3B8"/>
+                                    <TextBlock Text="{x:Bind ViewModel.StorageInfo, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
                         <Grid ColumnSpacing="8" RowSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

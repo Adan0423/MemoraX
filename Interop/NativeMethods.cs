@@ -66,6 +66,10 @@ internal static class NativeMethods
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool GetPhysicallyInstalledSystemMemory(out ulong TotalMemoryInKilobytes);
+
     [DllImport("kernel32.dll")]
     internal static extern nint GetCurrentProcess();
 

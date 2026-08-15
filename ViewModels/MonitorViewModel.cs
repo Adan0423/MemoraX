@@ -14,6 +14,7 @@ public partial class MonitorViewModel : ObservableObject
 
     public ObservableCollection<ProcessMemoryItem> TopProcesses { get; } = new();
 
+    [ObservableProperty] private string installedRam = "—";
     [ObservableProperty] private string totalRam = "—";
     [ObservableProperty] private string usedRam = "—";
     [ObservableProperty] private string availableRam = "—";
@@ -31,6 +32,7 @@ public partial class MonitorViewModel : ObservableObject
     [ObservableProperty] private string gpuFan = "—";
     [ObservableProperty] private string cpuName = "CPU";
     [ObservableProperty] private string gpuName = "GPU";
+    [ObservableProperty] private string storageInfo = "—";
 
     [ObservableProperty] private string statusMessage = "Monitorizando";
     [ObservableProperty] private string lastClean = "Todavía no";
@@ -62,12 +64,17 @@ public partial class MonitorViewModel : ObservableObject
             var hw = await hwTask;
             var processes = await processTask;
 
-            TotalRam = $"{mem.TotalGb:F1} GB";
+            InstalledRam = $"{mem.InstalledGb:F1} GB";
+            TotalRam = mem.InstalledGb > mem.TotalGb + 0.2
+                ? $"{mem.InstalledGb:F1} GB ({mem.TotalGb:F1} GB usable)"
+                : $"{mem.TotalGb:F1} GB";
+
             UsedRam = $"{mem.UsedGb:F1} GB";
             AvailableRam = $"{mem.AvailableGb:F1} GB";
             Standby = $"{mem.StandbyGb:F1} GB";
             StandbyPercent = $"{mem.StandbyPercent:F0}%";
             StandbyProgress = Math.Clamp(mem.StandbyPercent, 0, 100);
+            StorageInfo = ReadStorageInfo();
 
             if (hw is not null)
             {
@@ -132,5 +139,22 @@ public partial class MonitorViewModel : ObservableObject
         if (!used.HasValue && !total.HasValue) return "—";
         if (used.HasValue && total.HasValue) return $"{used:F0} / {total:F0} MB";
         return used.HasValue ? $"{used:F0} MB usadas" : $"{total:F0} MB total";
+    }
+
+    private static string ReadStorageInfo()
+    {
+        try
+        {
+            var drive = DriveInfo.GetDrives().FirstOrDefault(d => d.IsReady && d.DriveType == DriveType.Fixed);
+            if (drive is not null)
+            {
+                var totalGb = drive.TotalSize / 1024d / 1024d / 1024d;
+                var freeGb = drive.AvailableFreeSpace / 1024d / 1024d / 1024d;
+                var usedGb = totalGb - freeGb;
+                return $"{usedGb:F0} GB de {totalGb:F0} GB usado";
+            }
+        }
+        catch { }
+        return "—";
     }
 }
