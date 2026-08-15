@@ -36,7 +36,7 @@
             <Button Grid.Column="1" Click="Clean_Click" Background="#0EA5E9" Foreground="White" Padding="12,5" CornerRadius="8" FontWeight="SemiBold" FontSize="11">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <TextBlock Text="🧹" FontSize="11"/>
-                    <TextBlock Text="Limpiar Standby" VerticalAlignment="Center"/>
+                    <TextBlock Text="Limpiar" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
