@@ -45,8 +45,8 @@ public sealed partial class DashboardWindow : Window
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
         var appWindow = AppWindow.GetFromWindowId(windowId);
-        appWindow.Resize(new SizeInt32(1180, 760));
-        appWindow.Title = "Standby Memory Manager";
+        appWindow.Resize(new SizeInt32(1060, 680));
+        appWindow.Title = "MemoraX";
         appWindow.SetIcon("Assets/app_icon.ico");
     }
 
