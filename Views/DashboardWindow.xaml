@@ -18,38 +18,38 @@
         </Grid.RowDefinitions>
 
         <!-- Top Header Bar -->
-        <Grid Padding="20,14,20,10" Background="#111B2B">
+        <Grid Padding="16,10,16,8" Background="#111B2B">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                <Border Background="#0EA5E9" Width="32" Height="32" CornerRadius="10" VerticalAlignment="Center">
-                    <TextBlock Text="⚡" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <Border Background="#0EA5E9" Width="28" Height="28" CornerRadius="8" VerticalAlignment="Center">
+                    <TextBlock Text="⚡" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="MemoraX" FontSize="20" FontWeight="Bold" Foreground="#F8FAFC" />
-                    <TextBlock Text="Monitoreo de memoria, sensores y hardware en tiempo real" FontSize="11" Opacity="0.65" Foreground="#94A3B8" />
+                    <TextBlock Text="MemoraX" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
+                    <TextBlock Text="Monitoreo de memoria, sensores y hardware en tiempo real" FontSize="10" Opacity="0.65" Foreground="#94A3B8" />
                 </StackPanel>
             </StackPanel>
 
-            <Button Grid.Column="1" Click="Clean_Click" Background="#0EA5E9" Foreground="White" Padding="14,6" CornerRadius="10" FontWeight="SemiBold" FontSize="12">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Text="🧹" FontSize="12"/>
+            <Button Grid.Column="1" Click="Clean_Click" Background="#0EA5E9" Foreground="White" Padding="12,5" CornerRadius="8" FontWeight="SemiBold" FontSize="11">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="🧹" FontSize="11"/>
                     <TextBlock Text="Limpiar Standby" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
 
         <!-- Main Navigation Tabs -->
-        <TabView x:Name="MainTabs" Grid.Row="1" Margin="14,6,14,6" IsAddTabButtonVisible="False">
+        <TabView x:Name="MainTabs" Grid.Row="1" Margin="10,2,10,2" IsAddTabButtonVisible="False">
             <!-- TAB 1: RESUMEN -->
             <TabViewItem Header="📊 Resumen">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Spacing="10" Padding="4,8,4,16">
+                    <StackPanel Spacing="8" Padding="2,6,2,10">
 
                         <!-- Top Stat Cards (RAM Summary) -->
-                        <Grid ColumnSpacing="8" RowSpacing="8">
+                        <Grid ColumnSpacing="6" RowSpacing="6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -57,37 +57,37 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="12,10">
+                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
                                 <StackPanel Spacing="2">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                         <TextBlock Text="💻" FontSize="10"/>
-                                        <TextBlock Text="RAM TOTAL" FontSize="10" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
+                                        <TextBlock Text="RAM TOTAL" FontSize="9" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind ViewModel.TotalRam, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                    <TextBlock Text="{x:Bind ViewModel.TotalRam, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#F8FAFC"/>
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="12,10">
+                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
                                 <StackPanel Spacing="2">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                         <TextBlock Text="📈" FontSize="10"/>
-                                        <TextBlock Text="EN USO" FontSize="10" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
+                                        <TextBlock Text="EN USO" FontSize="9" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind ViewModel.UsedRam, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                    <TextBlock Text="{x:Bind ViewModel.UsedRam, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#F8FAFC"/>
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="2" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="12,10">
+                            <Border Grid.Column="2" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="10,8">
                                 <StackPanel Spacing="2">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                         <TextBlock Text="✅" FontSize="10"/>
-                                        <TextBlock Text="DISPONIBLE" FontSize="10" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
+                                        <TextBlock Text="DISPONIBLE" FontSize="9" FontWeight="Bold" Opacity="0.6" Foreground="#94A3B8"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind ViewModel.AvailableRam, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#42D392"/>
+                                    <TextBlock Text="{x:Bind ViewModel.AvailableRam, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#42D392"/>
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="3" Background="#0C2540" BorderBrush="#0EA5E9" BorderThickness="1" CornerRadius="12" Padding="12,10">
+                            <Border Grid.Column="3" Background="#0C2540" BorderBrush="#0EA5E9" BorderThickness="1" CornerRadius="10" Padding="10,8">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -96,54 +96,54 @@
                                     <StackPanel Spacing="2">
                                         <StackPanel Orientation="Horizontal" Spacing="4">
                                             <TextBlock Text="⚡" FontSize="10"/>
-                                            <TextBlock Text="STANDBY MEMORY" FontSize="10" FontWeight="Bold" Foreground="#38BDF8"/>
+                                            <TextBlock Text="STANDBY MEMORY" FontSize="9" FontWeight="Bold" Foreground="#38BDF8"/>
                                         </StackPanel>
-                                        <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#38BDF8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="17" FontWeight="Bold" Foreground="#38BDF8"/>
                                     </StackPanel>
-                                    <Border Grid.Column="1" Background="#1E3A8A" CornerRadius="6" Padding="6,2" VerticalAlignment="Center">
-                                        <TextBlock Text="{x:Bind ViewModel.StandbyPercent, Mode=OneWay}" FontSize="11" FontWeight="Bold" Foreground="#60A5FA"/>
+                                    <Border Grid.Column="1" Background="#1E3A8A" CornerRadius="5" Padding="5,2" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind ViewModel.StandbyPercent, Mode=OneWay}" FontSize="10" FontWeight="Bold" Foreground="#60A5FA"/>
                                     </Border>
                                 </Grid>
                             </Border>
                         </Grid>
 
                         <!-- Center Grid: Standby Hero Card + Hardware Summary -->
-                        <Grid ColumnSpacing="10" RowSpacing="10">
+                        <Grid ColumnSpacing="8" RowSpacing="8">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.4*" />
+                                <ColumnDefinition Width="1.3*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <!-- Standby Hero Card -->
-                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="14" Padding="16,14">
-                                <StackPanel Spacing="10">
+                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="14,10">
+                                <StackPanel Spacing="6">
                                     <Grid>
                                         <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                                            <TextBlock Text="⚡" FontSize="14"/>
-                                            <TextBlock Text="Caché Standby Actual" FontSize="14" FontWeight="SemiBold" Foreground="#F8FAFC"/>
+                                            <TextBlock Text="⚡" FontSize="13"/>
+                                            <TextBlock Text="Caché Standby Actual" FontSize="13" FontWeight="SemiBold" Foreground="#F8FAFC"/>
                                         </StackPanel>
-                                        <Button HorizontalAlignment="Right" Click="Clean_Click" Background="#1E293B" BorderBrush="#0EA5E9" BorderThickness="1" CornerRadius="8" Padding="10,4" FontSize="11" Foreground="#38BDF8">
+                                        <Button HorizontalAlignment="Right" Click="Clean_Click" Background="#1E293B" BorderBrush="#0EA5E9" BorderThickness="1" CornerRadius="6" Padding="8,3" FontSize="10" Foreground="#38BDF8">
                                             <StackPanel Orientation="Horizontal" Spacing="4">
                                                 <TextBlock Text="🧹 Purgar"/>
                                             </StackPanel>
                                         </Button>
                                     </Grid>
 
-                                    <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                                        <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="32" FontWeight="Bold" Foreground="#38BDF8" />
-                                        <Border Background="#0369A1" CornerRadius="8" Padding="8,4" VerticalAlignment="Center">
-                                            <TextBlock Text="{x:Bind ViewModel.StandbyPercent, Mode=OneWay}" FontSize="13" FontWeight="Bold" Foreground="#E0F2FE"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="28" FontWeight="Bold" Foreground="#38BDF8" />
+                                        <Border Background="#0369A1" CornerRadius="6" Padding="6,2" VerticalAlignment="Center">
+                                            <TextBlock Text="{x:Bind ViewModel.StandbyPercent, Mode=OneWay}" FontSize="12" FontWeight="Bold" Foreground="#E0F2FE"/>
                                         </Border>
                                     </StackPanel>
 
-                                    <ProgressBar Value="{x:Bind ViewModel.StandbyProgress, Mode=OneWay}" Maximum="100" Height="6" CornerRadius="3" Foreground="#38BDF8" Background="#0F172A"/>
+                                    <ProgressBar Value="{x:Bind ViewModel.StandbyProgress, Mode=OneWay}" Maximum="100" Height="5" CornerRadius="3" Foreground="#38BDF8" Background="#0F172A"/>
 
-                                    <TextBlock Text="La Standby Memory es memoria caché reutilizable gestionada por el kernel de Windows. Limpiarla libera esta memoria reservada bajo demanda." TextWrapping="Wrap" FontSize="11" Opacity="0.65" Foreground="#94A3B8"/>
+                                    <TextBlock Text="Memoria caché reutilizable gestionada por el kernel de Windows. Limpiarla libera esta reserva bajo demanda." TextWrapping="Wrap" FontSize="10" Opacity="0.6" Foreground="#94A3B8"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Right Hardware Overview Grid -->
-                            <Grid Grid.Column="1" RowSpacing="8" ColumnSpacing="8">
+                            <Grid Grid.Column="1" RowSpacing="6" ColumnSpacing="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
@@ -154,57 +154,57 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- GPU Temp -->
-                                <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="10,8">
-                                    <StackPanel Spacing="2">
-                                        <TextBlock Text="🌡️ GPU Temp" FontSize="10" FontWeight="SemiBold" Foreground="#94A3B8"/>
-                                        <TextBlock Text="{x:Bind ViewModel.GpuTemperature, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="8,6">
+                                    <StackPanel Spacing="1">
+                                        <TextBlock Text="🌡️ GPU Temp" FontSize="9" FontWeight="SemiBold" Foreground="#94A3B8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.GpuTemperature, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- CPU Temp -->
-                                <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="10,8">
-                                    <StackPanel Spacing="2">
-                                        <TextBlock Text="🔥 CPU Temp" FontSize="10" FontWeight="SemiBold" Foreground="#94A3B8"/>
-                                        <TextBlock Text="{x:Bind ViewModel.CpuTemperature, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="8,6">
+                                    <StackPanel Spacing="1">
+                                        <TextBlock Text="🔥 CPU Temp" FontSize="9" FontWeight="SemiBold" Foreground="#94A3B8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.CpuTemperature, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- GPU Load -->
-                                <Border Grid.Row="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="10,8">
-                                    <StackPanel Spacing="2">
-                                        <TextBlock Text="🎮 GPU Carga" FontSize="10" FontWeight="SemiBold" Foreground="#94A3B8"/>
-                                        <TextBlock Text="{x:Bind ViewModel.GpuLoad, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                <Border Grid.Row="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="8,6">
+                                    <StackPanel Spacing="1">
+                                        <TextBlock Text="🎮 GPU Carga" FontSize="9" FontWeight="SemiBold" Foreground="#94A3B8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.GpuLoad, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- CPU Load -->
-                                <Border Grid.Row="1" Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="10,8">
-                                    <StackPanel Spacing="2">
-                                        <TextBlock Text="⚙️ CPU Carga" FontSize="10" FontWeight="SemiBold" Foreground="#94A3B8"/>
-                                        <TextBlock Text="{x:Bind ViewModel.CpuLoad, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="8,6">
+                                    <StackPanel Spacing="1">
+                                        <TextBlock Text="⚙️ CPU Carga" FontSize="9" FontWeight="SemiBold" Foreground="#94A3B8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.CpuLoad, Mode=OneWay}" FontSize="16" FontWeight="Bold" Foreground="#F8FAFC"/>
                                     </StackPanel>
                                 </Border>
                             </Grid>
                         </Grid>
 
                         <!-- Bottom Session Stats Bar -->
-                        <Grid ColumnSpacing="8">
+                        <Grid ColumnSpacing="6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="12,8">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <TextBlock Text="⏱️" FontSize="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Última limpieza:" FontSize="11" Opacity="0.6" Foreground="#94A3B8" VerticalAlignment="Center"/>
-                                    <TextBlock Text="{x:Bind ViewModel.LastClean, Mode=OneWay}" FontSize="12" FontWeight="SemiBold" Foreground="#F8FAFC" VerticalAlignment="Center"/>
+                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="8" Padding="10,6">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="⏱️" FontSize="11" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Última limpieza:" FontSize="10" Opacity="0.6" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind ViewModel.LastClean, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
-                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="12,8">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <TextBlock Text="✨" FontSize="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Memoria liberada:" FontSize="11" Opacity="0.6" Foreground="#94A3B8" VerticalAlignment="Center"/>
-                                    <TextBlock Text="{x:Bind ViewModel.Released, Mode=OneWay}" FontSize="12" FontWeight="Bold" Foreground="#42D392" VerticalAlignment="Center"/>
+                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="8" Padding="10,6">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="✨" FontSize="11" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Memoria liberada:" FontSize="10" Opacity="0.6" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind ViewModel.Released, Mode=OneWay}" FontSize="11" FontWeight="Bold" Foreground="#42D392" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -216,72 +216,72 @@
             <!-- TAB 2: HARDWARE -->
             <TabViewItem Header="🌡️ Hardware">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Spacing="10" Padding="4,8,4,16">
-                        <TextBlock Text="Detalle de Sensores y Componentes" FontSize="16" FontWeight="SemiBold" Foreground="#F8FAFC" />
-                        <Grid ColumnSpacing="10" RowSpacing="10">
+                    <StackPanel Spacing="8" Padding="2,6,2,10">
+                        <TextBlock Text="Detalle de Sensores y Componentes" FontSize="14" FontWeight="SemiBold" Foreground="#F8FAFC" />
+                        <Grid ColumnSpacing="8" RowSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             
                             <!-- CPU Info Card -->
-                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="14" Padding="14,12">
-                                <StackPanel Spacing="6">
+                            <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="12,10">
+                                <StackPanel Spacing="4">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <TextBlock Text="⚙️" FontSize="14"/>
-                                        <TextBlock Text="{x:Bind ViewModel.CpuName, Mode=OneWay}" TextWrapping="Wrap" FontWeight="SemiBold" FontSize="13" Foreground="#F8FAFC" />
+                                        <TextBlock Text="⚙️" FontSize="13"/>
+                                        <TextBlock Text="{x:Bind ViewModel.CpuName, Mode=OneWay}" TextWrapping="Wrap" FontWeight="SemiBold" FontSize="12" Foreground="#F8FAFC" />
                                     </StackPanel>
                                     <Border Background="#23354E" Height="1" Margin="0,2"/>
-                                    <Grid ColumnSpacing="8">
+                                    <Grid ColumnSpacing="6">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                         <StackPanel>
-                                            <TextBlock Text="Temperatura" FontSize="10" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.CpuTemperature, Mode=OneWay}" FontSize="24" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                            <TextBlock Text="Temperatura" FontSize="9" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.CpuTemperature, Mode=OneWay}" FontSize="20" FontWeight="Bold" Foreground="#F8FAFC"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Carga de trabajo" FontSize="10" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.CpuLoad, Mode=OneWay}" FontSize="24" FontWeight="Bold" Foreground="#38BDF8"/>
+                                            <TextBlock Text="Carga de trabajo" FontSize="9" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.CpuLoad, Mode=OneWay}" FontSize="20" FontWeight="Bold" Foreground="#38BDF8"/>
                                         </StackPanel>
                                     </Grid>
-                                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,4,0,0">
-                                        <TextBlock Text="🌀 Ventilador:" FontSize="11" Foreground="#94A3B8"/>
-                                        <TextBlock Text="{x:Bind ViewModel.CpuFan, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,2,0,0">
+                                        <TextBlock Text="🌀 Ventilador:" FontSize="10" Foreground="#94A3B8"/>
+                                        <TextBlock Text="{x:Bind ViewModel.CpuFan, Mode=OneWay}" FontSize="10" FontWeight="SemiBold" Foreground="#F8FAFC"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
 
                             <!-- GPU Info Card -->
-                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="14" Padding="14,12">
-                                <StackPanel Spacing="6">
+                            <Border Grid.Column="1" Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="12,10">
+                                <StackPanel Spacing="4">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <TextBlock Text="🎮" FontSize="14"/>
-                                        <TextBlock Text="{x:Bind ViewModel.GpuName, Mode=OneWay}" TextWrapping="Wrap" FontWeight="SemiBold" FontSize="13" Foreground="#F8FAFC" />
+                                        <TextBlock Text="🎮" FontSize="13"/>
+                                        <TextBlock Text="{x:Bind ViewModel.GpuName, Mode=OneWay}" TextWrapping="Wrap" FontWeight="SemiBold" FontSize="12" Foreground="#F8FAFC" />
                                     </StackPanel>
                                     <Border Background="#23354E" Height="1" Margin="0,2"/>
-                                    <Grid ColumnSpacing="8">
+                                    <Grid ColumnSpacing="6">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                         <StackPanel>
-                                            <TextBlock Text="Temp Core" FontSize="10" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.GpuTemperature, Mode=OneWay}" FontSize="20" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                            <TextBlock Text="Temp Core" FontSize="9" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.GpuTemperature, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Hotspot" FontSize="10" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.GpuHotspot, Mode=OneWay}" FontSize="20" FontWeight="Bold" Foreground="#F43F5E"/>
+                                            <TextBlock Text="Hotspot" FontSize="9" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.GpuHotspot, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F43F5E"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="2">
-                                            <TextBlock Text="Carga" FontSize="10" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.GpuLoad, Mode=OneWay}" FontSize="20" FontWeight="Bold" Foreground="#38BDF8"/>
+                                            <TextBlock Text="Carga" FontSize="9" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.GpuLoad, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#38BDF8"/>
                                         </StackPanel>
                                     </Grid>
-                                    <Grid ColumnSpacing="8" Margin="0,4,0,0">
+                                    <Grid ColumnSpacing="6" Margin="0,2,0,0">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                         <StackPanel Orientation="Horizontal" Spacing="4">
-                                            <TextBlock Text="💾 VRAM:" FontSize="11" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.GpuVram, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC"/>
+                                            <TextBlock Text="💾 VRAM:" FontSize="10" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.GpuVram, Mode=OneWay}" FontSize="10" FontWeight="SemiBold" Foreground="#F8FAFC"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
-                                            <TextBlock Text="🌀 Fan:" FontSize="11" Foreground="#94A3B8"/>
-                                            <TextBlock Text="{x:Bind ViewModel.GpuFan, Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="#F8FAFC"/>
+                                            <TextBlock Text="🌀 Fan:" FontSize="10" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{x:Bind ViewModel.GpuFan, Mode=OneWay}" FontSize="10" FontWeight="SemiBold" Foreground="#F8FAFC"/>
                                         </StackPanel>
                                     </Grid>
                                 </StackPanel>
@@ -296,46 +296,46 @@
 
             <!-- TAB 3: PROCESOS (COMPACTO Y RESPONSIVO) -->
             <TabViewItem Header="📋 Procesos">
-                <Grid Padding="4,6,4,8" RowSpacing="8">
+                <Grid Padding="2,4,2,4" RowSpacing="6">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
                     <!-- Compact Note Banner -->
-                    <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="12,8">
+                    <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="8" Padding="10,6">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="💡" FontSize="14" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="La Standby List es una caché global del sistema Windows. Esta lista muestra los procesos ordenados por consumo de Working Set para diagnóstico." FontSize="11" Opacity="0.75" Foreground="#CBD5E1" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            <TextBlock Text="💡" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="La Standby List es una caché global del sistema Windows. Esta lista muestra los procesos ordenados por consumo de Working Set para diagnóstico." FontSize="10" Opacity="0.75" Foreground="#CBD5E1" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
 
                     <!-- Compact Process List -->
-                    <Border Grid.Row="1" Background="#111C2B" BorderBrush="#23354E" BorderThickness="1" CornerRadius="12" Padding="2">
+                    <Border Grid.Row="1" Background="#111C2B" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="1">
                         <ListView ItemsSource="{x:Bind ViewModel.TopProcesses, Mode=OneWay}" SelectionMode="None">
                             <ListView.Header>
-                                <Border Background="#1A273A" Padding="12,8" CornerRadius="10,10,0,0">
-                                    <Grid ColumnSpacing="10">
+                                <Border Background="#1A273A" Padding="10,6" CornerRadius="8,8,0,0">
+                                    <Grid ColumnSpacing="8">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="3*" />
                                             <ColumnDefinition Width="1.5*" />
                                             <ColumnDefinition Width="1.5*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Proceso / App" FontWeight="Bold" FontSize="11" Foreground="#94A3B8"/>
-                                        <TextBlock Grid.Column="1" Text="Working Set (RAM)" FontWeight="Bold" FontSize="11" Foreground="#94A3B8"/>
-                                        <TextBlock Grid.Column="2" Text="Memoria Privada" FontWeight="Bold" FontSize="11" Foreground="#94A3B8"/>
-                                        <TextBlock Grid.Column="3" Text="Estado" FontWeight="Bold" FontSize="11" Foreground="#94A3B8" Width="90"/>
+                                        <TextBlock Text="Proceso / App" FontWeight="Bold" FontSize="10" Foreground="#94A3B8"/>
+                                        <TextBlock Grid.Column="1" Text="Working Set (RAM)" FontWeight="Bold" FontSize="10" Foreground="#94A3B8"/>
+                                        <TextBlock Grid.Column="2" Text="Memoria Privada" FontWeight="Bold" FontSize="10" Foreground="#94A3B8"/>
+                                        <TextBlock Grid.Column="3" Text="Estado" FontWeight="Bold" FontSize="10" Foreground="#94A3B8" Width="80"/>
                                     </Grid>
                                 </Border>
                             </ListView.Header>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Padding="8,6" ColumnSpacing="10">
+                                    <Grid Padding="6,4" ColumnSpacing="8">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="3*" />
                                             <ColumnDefinition Width="1.5*" />
@@ -344,29 +344,29 @@
                                         </Grid.ColumnDefinitions>
                                         
                                         <!-- App Name & PID -->
-                                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                            <TextBlock Text="⚡" FontSize="11" Opacity="0.5" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="12" Foreground="#F8FAFC" VerticalAlignment="Center"/>
-                                            <Border Background="#1E293B" CornerRadius="4" Padding="4,1" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Pid}" FontSize="10" Foreground="#64748B"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                            <TextBlock Text="⚡" FontSize="10" Opacity="0.5" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="11" Foreground="#F8FAFC" VerticalAlignment="Center"/>
+                                            <Border Background="#1E293B" CornerRadius="4" Padding="3,1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Pid}" FontSize="9" Foreground="#64748B"/>
                                             </Border>
                                         </StackPanel>
 
                                         <!-- Working Set -->
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding WorkingSetDisplay}" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                                            <TextBlock Text="{Binding WorkingSetDisplay}" FontSize="11" FontWeight="SemiBold" Foreground="#38BDF8"/>
                                         </StackPanel>
 
                                         <!-- Private Memory -->
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding PrivateDisplay}" FontSize="12" Foreground="#CBD5E1"/>
+                                            <TextBlock Text="{Binding PrivateDisplay}" FontSize="11" Foreground="#CBD5E1"/>
                                         </StackPanel>
 
                                         <!-- Status Badge -->
-                                        <Border Grid.Column="3" Background="#064E3B" BorderBrush="#059669" BorderThickness="1" CornerRadius="6" Padding="6,2" VerticalAlignment="Center" Width="90">
-                                            <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
-                                                <Ellipse Width="5" Height="5" Fill="#34D399" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding Status}" FontSize="10" FontWeight="Bold" Foreground="#A7F3D0"/>
+                                        <Border Grid.Column="3" Background="#064E3B" BorderBrush="#059669" BorderThickness="1" CornerRadius="5" Padding="5,1" VerticalAlignment="Center" Width="80">
+                                            <StackPanel Orientation="Horizontal" Spacing="3" HorizontalAlignment="Center">
+                                                <Ellipse Width="4" Height="4" Fill="#34D399" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Status}" FontSize="9" FontWeight="Bold" Foreground="#A7F3D0"/>
                                             </StackPanel>
                                         </Border>
                                     </Grid>
@@ -379,17 +379,17 @@
         </TabView>
 
         <!-- Footer Status Bar -->
-        <Border Grid.Row="2" Background="#0F172A" Padding="14,6" BorderBrush="#1E293B" BorderThickness="0,1,0,0">
+        <Border Grid.Row="2" Background="#0F172A" Padding="12,5" BorderBrush="#1E293B" BorderThickness="0,1,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                    <Ellipse Width="6" Height="6" Fill="#38BDF8" VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" FontSize="11" Opacity="0.75" Foreground="#CBD5E1" />
+                <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                    <Ellipse Width="5" Height="5" Fill="#38BDF8" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" FontSize="10" Opacity="0.75" Foreground="#CBD5E1" />
                 </StackPanel>
-                <TextBlock Grid.Column="1" Text="Intervalo: 3 s" FontSize="11" Opacity="0.45" Foreground="#94A3B8" />
+                <TextBlock Grid.Column="1" Text="Intervalo: 3 s" FontSize="10" Opacity="0.45" Foreground="#94A3B8" />
             </Grid>
         </Border>
     </Grid>
