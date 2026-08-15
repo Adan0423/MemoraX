@@ -32,7 +32,7 @@ public sealed partial class WidgetWindow : Window
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
         var appWindow = AppWindow.GetFromWindowId(windowId);
-        appWindow.Resize(new SizeInt32(360, 220));
+        appWindow.Resize(new SizeInt32(330, 190));
         appWindow.SetIcon("Assets/app_icon.ico");
 
         if (appWindow.Presenter is OverlappedPresenter presenter)
@@ -48,7 +48,7 @@ public sealed partial class WidgetWindow : Window
         if (area is not null)
         {
             var work = area.WorkArea;
-            appWindow.Move(new PointInt32(work.X + work.Width - 384, work.Y + 32));
+            appWindow.Move(new PointInt32(work.X + work.Width - 350, work.Y + 32));
         }
     }
 
@@ -66,5 +66,17 @@ public sealed partial class WidgetWindow : Window
     private async void Clean_Click(object sender, RoutedEventArgs e) => await ViewModel.CleanAsync();
     private void Details_Click(object sender, RoutedEventArgs e) => _showDashboard(DashboardSection.Overview);
     private void Processes_Click(object sender, RoutedEventArgs e) => _showDashboard(DashboardSection.Processes);
+    
+    private void Minimize_Click(object sender, RoutedEventArgs e)
+    {
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+        var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+        var appWindow = AppWindow.GetFromWindowId(windowId);
+        if (appWindow.Presenter is OverlappedPresenter presenter)
+        {
+            presenter.Minimize();
+        }
+    }
+
     private void Close_Click(object sender, RoutedEventArgs e) => Application.Current.Exit();
 }

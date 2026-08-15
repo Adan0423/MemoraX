@@ -10,8 +10,8 @@
         <MicaBackdrop Kind="BaseAlt" />
     </Window.SystemBackdrop>
 
-    <Border BorderBrush="#2A3C54" BorderThickness="1" CornerRadius="18" Background="#EE09111E">
-        <Grid Padding="16" PointerPressed="RootGrid_PointerPressed">
+    <Border BorderBrush="#2A3C54" BorderThickness="1" CornerRadius="16" Background="#EE09111E">
+        <Grid Padding="12,10,12,10" PointerPressed="RootGrid_PointerPressed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -19,75 +19,77 @@
             </Grid.RowDefinitions>
 
             <!-- Header Bar -->
-            <Grid Grid.Row="0" Margin="2,0,2,6">
+            <Grid Grid.Row="0" Margin="2,0,2,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                    <Ellipse Width="7" Height="7" Fill="#42D392" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <Ellipse Width="6" Height="6" Fill="#42D392" VerticalAlignment="Center" />
                     <TextBlock Text="MEMORAX" FontSize="11" FontWeight="Bold" CharacterSpacing="60" Opacity="0.85" Foreground="#94A3B8" />
                 </StackPanel>
-                <Button Grid.Column="1" Content="✕" Click="Close_Click" Background="Transparent" BorderThickness="0" CornerRadius="8" Padding="6,2" FontSize="12" Opacity="0.7" />
+
+                <!-- Minimize and Close Buttons -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                    <Button Content="—" Click="Minimize_Click" Background="Transparent" BorderThickness="0" CornerRadius="6" Padding="6,1" FontSize="11" Opacity="0.7" Foreground="#94A3B8"/>
+                    <Button Content="✕" Click="Close_Click" Background="Transparent" BorderThickness="0" CornerRadius="6" Padding="6,1" FontSize="11" Opacity="0.7" Foreground="#94A3B8"/>
+                </StackPanel>
             </Grid>
 
             <!-- Main Interactive Display -->
-            <Grid Grid.Row="1" Margin="0,6,0,10">
+            <Grid Grid.Row="1" Margin="0,4,0,6">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.3*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="124" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Standby Memory Hero Button -->
                 <Button Click="Clean_Click" Background="#132035" BorderBrush="#243752" BorderThickness="1"
-                        CornerRadius="20" Padding="14" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                        CornerRadius="14" Padding="10,8" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Caché Standby" FontSize="12" Opacity="0.75" HorizontalAlignment="Center" Foreground="#CBD5E1" />
-                        <TextBlock Grid.Row="1" Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="28"
-                                   FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2" Foreground="#38BDF8" />
+                        <TextBlock Text="Caché Standby" FontSize="11" Opacity="0.75" HorizontalAlignment="Center" Foreground="#CBD5E1" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" Margin="0,2">
+                            <TextBlock Text="{x:Bind ViewModel.Standby, Mode=OneWay}" FontSize="22" FontWeight="Bold" Foreground="#38BDF8" />
+                        </StackPanel>
                         <ProgressBar Grid.Row="2" Value="{x:Bind ViewModel.StandbyProgress, Mode=OneWay}"
-                                     Maximum="100" Height="4" Margin="2,6,2,0" Foreground="#38BDF8" />
+                                     Maximum="100" Height="4" Margin="2,4,2,0" Foreground="#38BDF8" />
                     </Grid>
                 </Button>
 
                 <!-- Hardware Temp Badges -->
-                <StackPanel Grid.Column="1" Spacing="8" Margin="10,0,0,0">
-                    <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="14" Padding="10,8">
+                <StackPanel Grid.Column="1" Spacing="6" Margin="8,0,0,0" VerticalAlignment="Center">
+                    <!-- GPU Temp -->
+                    <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="8,5">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Text="GPU 🌡️" FontSize="10" FontWeight="SemiBold" Opacity="0.65" Foreground="#94A3B8" />
-                                <TextBlock Text="{x:Bind ViewModel.GpuTemperature, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
+                                <TextBlock Text="GPU 🌡️" FontSize="9" FontWeight="SemiBold" Opacity="0.65" Foreground="#94A3B8" />
+                                <TextBlock Text="{x:Bind ViewModel.GpuTemperature, Mode=OneWay}" FontSize="15" FontWeight="Bold" Foreground="#F8FAFC" />
                             </StackPanel>
-                            <Ellipse Grid.Column="1" Width="6" Height="6" Fill="#38BDF8" VerticalAlignment="Center" Margin="0,0,4,0" />
+                            <Ellipse Grid.Column="1" Width="5" Height="5" Fill="#38BDF8" VerticalAlignment="Center" Margin="0,0,2,0" />
                         </Grid>
                     </Border>
-                    <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="14" Padding="10,8">
+
+                    <!-- CPU Temp -->
+                    <Border Background="#162337" BorderBrush="#23354E" BorderThickness="1" CornerRadius="10" Padding="8,5">
                         <StackPanel>
-                            <TextBlock Text="CPU ⚡" FontSize="10" FontWeight="SemiBold" Opacity="0.65" Foreground="#94A3B8" />
-                            <TextBlock Text="{x:Bind ViewModel.CpuTemperature, Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
+                            <TextBlock Text="CPU ⚡" FontSize="9" FontWeight="SemiBold" Opacity="0.65" Foreground="#94A3B8" />
+                            <TextBlock Text="{x:Bind ViewModel.CpuTemperature, Mode=OneWay}" FontSize="15" FontWeight="Bold" Foreground="#F8FAFC" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </Grid>
 
-            <!-- Bottom Action Navigation Buttons -->
-            <Grid Grid.Row="2" ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Content="📊  Resumen" Click="Details_Click" Background="#17263C" BorderBrush="#263A56" BorderThickness="1" CornerRadius="12" Height="36" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Stretch" />
-                <Button Grid.Column="1" Content="⚡  Procesos" Click="Processes_Click" Background="#17263C" BorderBrush="#263A56" BorderThickness="1" CornerRadius="12" Height="36" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Stretch" />
-            </Grid>
+            <!-- Bottom Action Navigation Button (Single Full-Width) -->
+            <Button Grid.Row="2" Content="📊  Abrir MemoraX" Click="Details_Click" Background="#17263C" BorderBrush="#263A56" BorderThickness="1" CornerRadius="10" Height="32" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Stretch" />
         </Grid>
     </Border>
 </Window>
