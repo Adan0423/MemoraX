@@ -45,23 +45,26 @@ public sealed class HardwareMonitorService : IDisposable
                 if (hardware.HardwareType == HardwareType.Cpu)
                 {
                     cpuName = hardware.Name;
-                    cpuTemp = FindPreferredTemperature(hardware, "CPU Package", "Package", "Core") ?? cpuTemp;
+                    cpuTemp = FindPreferredTemperature(hardware, "Tctl/Tdie", "Tdie", "CPU Package", "Package", "Core", "CCD") ?? cpuTemp;
                     cpuLoad = FindSensor(hardware, SensorType.Load, "CPU Total", "Total") ?? cpuLoad;
                     cpuFan = FindSensor(hardware, SensorType.Fan, "CPU") ?? cpuFan;
                 }
                 else if (hardware.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel)
                 {
                     gpuName = hardware.Name;
-                    gpuTemp = FindPreferredTemperature(hardware, "GPU Core", "Core") ?? gpuTemp;
-                    gpuHotspot = FindPreferredTemperature(hardware, "Hot Spot", "Hotspot") ?? gpuHotspot;
-                    gpuLoad = FindSensor(hardware, SensorType.Load, "GPU Core", "Core") ?? gpuLoad;
-                    gpuMemUsed = FindSensor(hardware, SensorType.SmallData, "GPU Memory Used", "Memory Used") ?? gpuMemUsed;
-                    gpuMemTotal = FindSensor(hardware, SensorType.SmallData, "GPU Memory Total", "Memory Total") ?? gpuMemTotal;
+                    gpuTemp = FindPreferredTemperature(hardware, "GPU Core", "GPU Edge", "Edge", "Core", "GPU", "Temperature") ?? gpuTemp;
+                    gpuHotspot = FindPreferredTemperature(hardware, "Hot Spot", "Hotspot", "Junction") ?? gpuHotspot;
+                    gpuLoad = FindSensor(hardware, SensorType.Load, "GPU Core", "Core", "GPU D3D") ?? gpuLoad;
+                    gpuMemUsed = FindSensor(hardware, SensorType.SmallData, "GPU Memory Used", "Memory Used", "D3D Dedicated Memory Used") ?? gpuMemUsed;
+                    gpuMemTotal = FindSensor(hardware, SensorType.SmallData, "GPU Memory Total", "Memory Total", "D3D Dedicated Memory Total") ?? gpuMemTotal;
                     gpuFan = FindSensor(hardware, SensorType.Fan, "GPU") ?? gpuFan;
                 }
 
                 if (cpuFan is null && hardware.HardwareType == HardwareType.Motherboard)
                     cpuFan = FindSensorRecursive(hardware, SensorType.Fan, "CPU", "Fan #1") ?? cpuFan;
+
+                if (cpuTemp is null && hardware.HardwareType == HardwareType.Motherboard)
+                    cpuTemp = FindPreferredTemperature(hardware, "CPU", "Package");
             }
 
             return new HardwareSnapshot(cpuTemp, gpuTemp, gpuHotspot, cpuLoad, gpuLoad,
@@ -81,13 +84,15 @@ public sealed class HardwareMonitorService : IDisposable
         foreach (var preferred in preferredNames)
         {
             var sensor = EnumerateSensors(hardware)
-                .FirstOrDefault(s => s.SensorType == SensorType.Temperature && s.Value.HasValue &&
+                .FirstOrDefault(s => s.SensorType == SensorType.Temperature &&
+                                     s.Value.HasValue &&
+                                     s.Value.Value > 0 && s.Value.Value < 125 &&
                                      s.Name.Contains(preferred, StringComparison.OrdinalIgnoreCase));
-            if (sensor?.Value is float value) return value;
+            if (sensor?.Value is float value && value > 0) return value;
         }
 
         var temperatures = EnumerateSensors(hardware)
-            .Where(s => s.SensorType == SensorType.Temperature && s.Value.HasValue)
+            .Where(s => s.SensorType == SensorType.Temperature && s.Value.HasValue && s.Value.Value > 0 && s.Value.Value < 125)
             .Select(s => (double)s.Value!.Value)
             .ToArray();
 

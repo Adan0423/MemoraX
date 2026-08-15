@@ -1,6 +1,8 @@
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using StandbyMemoryManager.Interop;
 using StandbyMemoryManager.Services;
 using StandbyMemoryManager.ViewModels;
@@ -19,6 +21,8 @@ public sealed partial class WidgetWindow : Window
         InitializeComponent();
         ViewModel = new MonitorViewModel(memory, hardware);
         _showDashboard = showDashboard;
+
+        RootGrid.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(RootGrid_PointerPressed), handledEventsToo: true);
 
         ConfigureWindow();
         _timer.Tick += async (_, _) => await ViewModel.RefreshAsync(includeHardware: true);
@@ -54,19 +58,32 @@ public sealed partial class WidgetWindow : Window
 
     private void RootGrid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        var point = e.GetCurrentPoint(sender as UIElement);
-        if (point.Properties.IsLeftButtonPressed)
+        if (e.GetCurrentPoint(sender as UIElement).Properties.IsLeftButtonPressed)
         {
+            if (IsButtonClick(e.OriginalSource as DependencyObject))
+                return;
+
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             NativeMethods.ReleaseCapture();
             NativeMethods.SendMessage(hwnd, NativeMethods.WM_NCLBUTTONDOWN, NativeMethods.HTCAPTION, 0);
+            e.Handled = true;
         }
+    }
+
+    private static bool IsButtonClick(DependencyObject? element)
+    {
+        while (element is not null)
+        {
+            if (element is Button) return true;
+            element = VisualTreeHelper.GetParent(element);
+        }
+        return false;
     }
 
     private async void Clean_Click(object sender, RoutedEventArgs e) => await ViewModel.CleanAsync();
     private void Details_Click(object sender, RoutedEventArgs e) => _showDashboard(DashboardSection.Overview);
     private void Processes_Click(object sender, RoutedEventArgs e) => _showDashboard(DashboardSection.Processes);
-    
+
     private void Minimize_Click(object sender, RoutedEventArgs e)
     {
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);

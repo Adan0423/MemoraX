@@ -11,7 +11,7 @@
     </Window.SystemBackdrop>
 
     <Border BorderBrush="#2A3C54" BorderThickness="1" CornerRadius="16" Background="#EE09111E">
-        <Grid Padding="12,10,12,10" PointerPressed="RootGrid_PointerPressed">
+        <Grid x:Name="RootGrid" Padding="12,10,12,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />

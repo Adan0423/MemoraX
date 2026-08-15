@@ -124,7 +124,7 @@ public partial class MonitorViewModel : ObservableObject
         }
     }
 
-    private static string Temp(double? value) => value.HasValue ? $"{value:F0} °C" : "—";
+    private static string Temp(double? value) => (value.HasValue && value.Value > 0) ? $"{value:F0} °C" : "—";
     private static string Percent(double? value) => value.HasValue ? $"{value:F0}%" : "—";
     private static string Rpm(double? value) => value.HasValue ? $"{value:F0} RPM" : "—";
     private static string FormatVram(double? used, double? total)
