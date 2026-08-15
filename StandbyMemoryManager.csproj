@@ -30,4 +30,13 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
   </ItemGroup>
+
+  <!-- Copiar archivo .pri requerido por WinUI 3 en publicaciones unpackaged (WindowsPackageType=None) -->
+  <Target Name="CopyPriFileToPublish" AfterTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <ResolvedFileToPublish Include="$(TargetDir)$(TargetName).pri" RelativePath="$(TargetName).pri" CopyToPublishDirectory="PreserveNewest" Condition="Exists('$(TargetDir)$(TargetName).pri')" />
+      <ResolvedFileToPublish Include="$(TargetDir)$(TargetName).pri" RelativePath="resources.pri" CopyToPublishDirectory="PreserveNewest" Condition="Exists('$(TargetDir)$(TargetName).pri')" />
+    </ItemGroup>
+  </Target>
 </Project>
+

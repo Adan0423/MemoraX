@@ -45,6 +45,14 @@ if ($LASTEXITCODE -ne 0) {
     Write-Error "Fallo en la publicacion de .NET."
     exit $LASTEXITCODE
 }
+
+# Asegurar archivos .pri requeridos por WinUI 3 en publicaciones unpackaged
+$PriSource = Join-Path $ProjectDir "bin\x64\Release\net9.0-windows10.0.19041.0\win-x64\StandbyMemoryManager.pri"
+if (Test-Path $PriSource) {
+    Copy-Item $PriSource (Join-Path $PublishDir "StandbyMemoryManager.pri") -Force
+    Copy-Item $PriSource (Join-Path $PublishDir "resources.pri") -Force
+}
+
 Write-Host "      [OK] Publicacion completada con exito." -ForegroundColor Green
 
 # 3. Generar version Portable (.zip)

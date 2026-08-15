@@ -13,8 +13,8 @@ public sealed partial class DashboardWindow : Window
 
     public DashboardWindow(MemoryService memory, HardwareMonitorService hardware, ProcessMemoryService processes)
     {
-        InitializeComponent();
         ViewModel = new MonitorViewModel(memory, hardware, processes);
+        InitializeComponent();
         ConfigureWindow();
 
         _timer.Tick += async (_, _) =>

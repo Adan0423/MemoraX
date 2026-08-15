@@ -18,8 +18,8 @@ public sealed partial class WidgetWindow : Window
 
     public WidgetWindow(MemoryService memory, HardwareMonitorService hardware, Action<DashboardSection> showDashboard)
     {
-        InitializeComponent();
         ViewModel = new MonitorViewModel(memory, hardware);
+        InitializeComponent();
         _showDashboard = showDashboard;
 
         RootGrid.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(RootGrid_PointerPressed), handledEventsToo: true);
