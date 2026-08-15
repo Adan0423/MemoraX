@@ -124,7 +124,17 @@ dotnet build -c Release -p:Platform=x64
 dotnet run -c Release --no-build -p:Platform=x64
 ```
 
+### **4. Opción C: Generar Instalador .exe y Paquete Portable (Producción)**
+```powershell
+# Ejecutar el empaquetador automático (Compila .NET, genera .zip portable y .exe con Inno Setup)
+.\build_installer.ps1
+```
+*Los archivos finales se ubicarán en la carpeta `dist/`:*
+- 📦 **Instalador Ejecutable**: `dist/MemoraX_Setup_v1.0.0.exe` (Instalador completo con accesos directos y permisos de Administrador).
+- 🗜️ **Paquete Portable**: `dist/MemoraX_v1.0.0_Portable_x64.zip` (Versión autocontenida sin requerir instalación).
+
 ---
+
 
 ## 🔒 Detalles Técnicos & Seguridad
 
