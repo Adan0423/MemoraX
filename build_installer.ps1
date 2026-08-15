@@ -50,8 +50,15 @@ Write-Host "      [OK] Publicacion completada con exito." -ForegroundColor Green
 # 3. Generar version Portable (.zip)
 Write-Host "[3/4] Creando paquete Portable (.zip)..." -ForegroundColor Yellow
 $ZipPath = Join-Path $DistDir "MemoraX_v1.0.0_Portable_x64.zip"
-if (Test-Path $ZipPath) { Remove-Item -Force $ZipPath }
-Compress-Archive -Path "$PublishDir\*" -DestinationPath $ZipPath -Force
+if (Test-Path $ZipPath) {
+    try { Remove-Item -Force $ZipPath -ErrorAction SilentlyContinue } catch {}
+}
+if (Test-Path $ZipPath) {
+    $ZipPath = Join-Path $DistDir "MemoraX_v1.0.0_Portable_x64_new.zip"
+}
+
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory($PublishDir, $ZipPath, [System.IO.Compression.CompressionLevel]::Optimal, $false)
 $ZipItem = Get-Item $ZipPath
 $ZipSizeMB = [math]::Round($ZipItem.Length / 1MB, 2)
 Write-Host "      [OK] Paquete portable generado: $ZipPath ($ZipSizeMB MB)" -ForegroundColor Green

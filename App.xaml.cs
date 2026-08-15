@@ -16,11 +16,28 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+        UnhandledException += (sender, e) =>
+        {
+            e.Handled = true;
+            try
+            {
+                var dir = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "MemoraX");
+                System.IO.Directory.CreateDirectory(dir);
+                var logPath = System.IO.Path.Combine(dir, "crash.log");
+                System.IO.File.AppendAllText(logPath, $"[{System.DateTime.Now}] Exception: {e.Exception}\n");
+            }
+            catch { }
+        };
     }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        HardwareMonitorService.Start();
+        try
+        {
+            HardwareMonitorService.Start();
+        }
+        catch { }
+
         _widget = new WidgetWindow(MemoryService, HardwareMonitorService, ShowDashboard);
         _widget.Activate();
     }

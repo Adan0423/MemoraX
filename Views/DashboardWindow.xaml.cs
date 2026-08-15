@@ -47,7 +47,18 @@ public sealed partial class DashboardWindow : Window
         var appWindow = AppWindow.GetFromWindowId(windowId);
         appWindow.Resize(new SizeInt32(960, 480));
         appWindow.Title = "MemoraX";
-        appWindow.SetIcon("Assets/app_icon.ico");
+        try
+        {
+            var iconPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets", "app_icon.ico");
+            if (System.IO.File.Exists(iconPath))
+            {
+                appWindow.SetIcon(iconPath);
+            }
+        }
+        catch
+        {
+            // Ignorar errores al cargar el icono
+        }
     }
 
     private async void Clean_Click(object sender, RoutedEventArgs e) => await ViewModel.CleanAsync();

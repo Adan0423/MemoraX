@@ -14,15 +14,36 @@ public sealed class HardwareMonitorService : IDisposable
         {
             if (_computer is not null) return;
 
-            _computer = new Computer
+            try
             {
-                IsCpuEnabled = true,
-                IsGpuEnabled = true,
-                IsMemoryEnabled = true,
-                IsMotherboardEnabled = true,
-                IsControllerEnabled = true
-            };
-            _computer.Open();
+                _computer = new Computer
+                {
+                    IsCpuEnabled = true,
+                    IsGpuEnabled = true,
+                    IsMemoryEnabled = true,
+                    IsMotherboardEnabled = true,
+                    IsControllerEnabled = true
+                };
+                _computer.Open();
+            }
+            catch
+            {
+                try
+                {
+                    _computer?.Close();
+                    _computer = new Computer
+                    {
+                        IsCpuEnabled = true,
+                        IsGpuEnabled = true,
+                        IsMemoryEnabled = true
+                    };
+                    _computer.Open();
+                }
+                catch
+                {
+                    _computer = null;
+                }
+            }
         }
     }
 
@@ -31,6 +52,10 @@ public sealed class HardwareMonitorService : IDisposable
         lock (_sync)
         {
             if (_computer is null) Start();
+            if (_computer is null)
+            {
+                return new HardwareSnapshot(null, null, null, null, null, null, null, null, null, "CPU", "GPU", DateTimeOffset.Now);
+            }
 
             double? cpuTemp = null, gpuTemp = null, gpuHotspot = null;
             double? cpuLoad = null, gpuLoad = null;
@@ -38,33 +63,40 @@ public sealed class HardwareMonitorService : IDisposable
             double? cpuFan = null, gpuFan = null;
             string cpuName = "CPU", gpuName = "GPU";
 
-            foreach (var hardware in _computer!.Hardware)
+            try
             {
-                UpdateHardwareTree(hardware);
-
-                if (hardware.HardwareType == HardwareType.Cpu)
+                foreach (var hardware in _computer.Hardware)
                 {
-                    cpuName = hardware.Name;
-                    cpuTemp = FindPreferredTemperature(hardware, "Tctl/Tdie", "Tdie", "CPU Package", "Package", "Core", "CCD") ?? cpuTemp;
-                    cpuLoad = FindSensor(hardware, SensorType.Load, "CPU Total", "Total") ?? cpuLoad;
-                    cpuFan = FindSensor(hardware, SensorType.Fan, "CPU") ?? cpuFan;
-                }
-                else if (hardware.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel)
-                {
-                    gpuName = hardware.Name;
-                    gpuTemp = FindPreferredTemperature(hardware, "GPU Core", "GPU Edge", "Edge", "Core", "GPU", "Temperature") ?? gpuTemp;
-                    gpuHotspot = FindPreferredTemperature(hardware, "Hot Spot", "Hotspot", "Junction") ?? gpuHotspot;
-                    gpuLoad = FindSensor(hardware, SensorType.Load, "GPU Core", "Core", "GPU D3D") ?? gpuLoad;
-                    gpuMemUsed = FindSensor(hardware, SensorType.SmallData, "GPU Memory Used", "Memory Used", "D3D Dedicated Memory Used") ?? gpuMemUsed;
-                    gpuMemTotal = FindSensor(hardware, SensorType.SmallData, "GPU Memory Total", "Memory Total", "D3D Dedicated Memory Total") ?? gpuMemTotal;
-                    gpuFan = FindSensor(hardware, SensorType.Fan, "GPU") ?? gpuFan;
-                }
+                    UpdateHardwareTree(hardware);
 
-                if (cpuFan is null && hardware.HardwareType == HardwareType.Motherboard)
-                    cpuFan = FindSensorRecursive(hardware, SensorType.Fan, "CPU", "Fan #1") ?? cpuFan;
+                    if (hardware.HardwareType == HardwareType.Cpu)
+                    {
+                        cpuName = hardware.Name;
+                        cpuTemp = FindPreferredTemperature(hardware, "Tctl/Tdie", "Tdie", "CPU Package", "Package", "Core", "CCD") ?? cpuTemp;
+                        cpuLoad = FindSensor(hardware, SensorType.Load, "CPU Total", "Total") ?? cpuLoad;
+                        cpuFan = FindSensor(hardware, SensorType.Fan, "CPU") ?? cpuFan;
+                    }
+                    else if (hardware.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel)
+                    {
+                        gpuName = hardware.Name;
+                        gpuTemp = FindPreferredTemperature(hardware, "GPU Core", "GPU Edge", "Edge", "Core", "GPU", "Temperature") ?? gpuTemp;
+                        gpuHotspot = FindPreferredTemperature(hardware, "Hot Spot", "Hotspot", "Junction") ?? gpuHotspot;
+                        gpuLoad = FindSensor(hardware, SensorType.Load, "GPU Core", "Core", "GPU D3D") ?? gpuLoad;
+                        gpuMemUsed = FindSensor(hardware, SensorType.SmallData, "GPU Memory Used", "Memory Used", "D3D Dedicated Memory Used") ?? gpuMemUsed;
+                        gpuMemTotal = FindSensor(hardware, SensorType.SmallData, "GPU Memory Total", "Memory Total", "D3D Dedicated Memory Total") ?? gpuMemTotal;
+                        gpuFan = FindSensor(hardware, SensorType.Fan, "GPU") ?? gpuFan;
+                    }
 
-                if (cpuTemp is null && hardware.HardwareType == HardwareType.Motherboard)
-                    cpuTemp = FindPreferredTemperature(hardware, "CPU", "Package");
+                    if (cpuFan is null && hardware.HardwareType == HardwareType.Motherboard)
+                        cpuFan = FindSensorRecursive(hardware, SensorType.Fan, "CPU", "Fan #1") ?? cpuFan;
+
+                    if (cpuTemp is null && hardware.HardwareType == HardwareType.Motherboard)
+                        cpuTemp = FindPreferredTemperature(hardware, "CPU", "Package");
+                }
+            }
+            catch
+            {
+                // Ignorar errores al enumerar sensores para mantener la UI funcionando
             }
 
             return new HardwareSnapshot(cpuTemp, gpuTemp, gpuHotspot, cpuLoad, gpuLoad,

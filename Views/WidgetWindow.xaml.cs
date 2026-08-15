@@ -37,7 +37,18 @@ public sealed partial class WidgetWindow : Window
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
         var appWindow = AppWindow.GetFromWindowId(windowId);
         appWindow.Resize(new SizeInt32(330, 190));
-        appWindow.SetIcon("Assets/app_icon.ico");
+        try
+        {
+            var iconPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets", "app_icon.ico");
+            if (System.IO.File.Exists(iconPath))
+            {
+                appWindow.SetIcon(iconPath);
+            }
+        }
+        catch
+        {
+            // Ignorar errores al cargar el icono
+        }
 
         if (appWindow.Presenter is OverlappedPresenter presenter)
         {
