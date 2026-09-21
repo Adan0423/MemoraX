@@ -1,4 +1,4 @@
-namespace StandbyMemoryManager.Models;
+namespace Veltrixa.Models;
 
 public sealed record HardwareSnapshot(
     double? CpuTemperatureC,
@@ -12,4 +12,7 @@ public sealed record HardwareSnapshot(
     double? GpuFanRpm,
     string CpuName,
     string GpuName,
-    DateTimeOffset Timestamp);
+    DateTimeOffset Timestamp)
+{
+    public string? Error { get; init; }
+}

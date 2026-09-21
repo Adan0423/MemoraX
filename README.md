@@ -1,152 +1,89 @@
-<div align="center">
+﻿# Veltrixa
 
-  # ⚡ MemoraX
+Veltrixa es una utilidad de escritorio nativa y exclusiva para Windows x64. Permite consultar memoria RAM, sensores de hardware y procesos desde un panel y un widget flotante, y vaciar manualmente la caché Standby cuando se necesita realizar una prueba o un diagnóstico.
 
-  **Utilidad moderna para Windows 11 para la visualización, gestión de Standby Memory y monitoreo térmico/hardware en tiempo real.**
+La interfaz está construida con WinUI 3 y .NET 9. El proyecto se configura para Windows 10, versión 2004 (compilación 19041), o posterior, incluido Windows 11. La disponibilidad de sensores depende del equipo y sus controladores.
 
-  [![Windows 11](https://img.shields.io/badge/OS-Windows%2011%20x64-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://microsoft.com)
-  [![.NET 9.0](https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-  [![WinUI 3](https://img.shields.io/badge/UI-WinUI%203-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://learn.microsoft.com/windows/apps/winui/winui3/)
-  [![C#](https://img.shields.io/badge/Language-C%23%2013-239120?style=for-the-badge&logo=csharp&logoColor=white)](https://docs.microsoft.com/dotnet/csharp/)
-  [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+## Funciones
 
-  <p align="center">
-    <a href="#-acerca-del-proyecto">Acerca del Proyecto</a> •
-    <a href="#-características-principales">Características</a> •
-    <a href="#-stack-tecnológico">Stack Tecnológico</a> •
-    <a href="#-arquitectura-del-proyecto">Arquitectura</a> •
-    <a href="#-instalación-y-ejecución">Instalación</a> •
-    <a href="#-detalles-técnicos--seguridad">Seguridad</a>
-  </p>
+- Widget flotante compacto siempre encima; sus acciones aparecen con clic derecho para no ocupar espacio permanente.
+- Botón compacto de optimización dentro del widget para ejecutar la limpieza manual de Standby con un toque.
+- Memoria total, en uso, disponible y caché Standby con unidades y estados de lectura explícitos.
+- Temperaturas y carga de CPU y GPU, memoria gráfica y ventiladores cuando el hardware proporciona esos datos.
+- Lista de procesos por consumo de memoria, con actualización incremental.
+- Limpieza manual coordinada entre las ventanas, con progreso y resultado compartidos.
+- Temas claro, oscuro y del sistema, navegación accesible y distribución adaptable al tamaño de la ventana.
 
-</div>
+Standby es una caché reutilizable que **ya forma parte de la memoria disponible**. Su tamaño no representa, por sí solo, un problema ni memoria perdida. Veltrixa no realiza limpiezas automáticas ni promete acelerar el equipo. Una lectura fallida o un sensor ausente se presenta como no disponible, sin sustituirlo por un cero o por otro sensor.
 
----
+## Monitoreo y eficiencia
 
-## 📌 Acerca del Proyecto
+El widget y el panel comparten un único coordinador de monitoreo. Las consultas se ejecutan fuera del hilo de interfaz y se programan según el dato y la visibilidad:
 
-**MemoraX** (Standby Memory Manager) es una aplicación de escritorio nativa para Windows 11 diseñada para ofrecer una experiencia fluida y elegante al monitorizar la memoria del sistema y el estado de tu hardware.
+| Dato | Frecuencia con la interfaz visible |
+| --- | --- |
+| Memoria RAM | 2 segundos |
+| Sensores de hardware | 3 segundos |
+| Procesos | 5 segundos, solo en su sección visible |
+| Espacio en discos | 60 segundos, cuando se muestra en el panel |
 
-Construida con la arquitectura **WinUI 3** y **.NET 9**, MemoraX te permite consultar con precisión la memoria RAM (incluida la *Standby List*), efectuar limpiezas manuales seguras con llamadas NT del sistema operativo, y monitorear sensores térmicos y de carga de CPU/GPU en tiempo real a través de un widget flotante siempre visible (*Always-On-Top*) y un completo dashboard con estética Fluent y efectos Mica.
+Cuando ninguna ventana está visible, el monitoreo de memoria y hardware se reduce a una consulta cada 30 segundos. Abrir o restaurar una ventana solicita datos actualizados. La limpieza es una operación única compartida: ambas ventanas reflejan el mismo estado y solo una limpieza correcta actualiza la fecha de éxito.
 
----
+## Compilar y ejecutar
 
-## 🚀 Características Principales
+Requisitos de desarrollo:
 
-| Icono | Función | Descripción |
-| :---: | :--- | :--- |
-| 🪟 | **Widget Flotante Always-On-Top** | Mantiene un panel compacto de acceso rápido siempre visible para vigilar métricas clave sin interrumpir tus tareas. |
-| 🧹 | **Limpieza de Standby Memory** | Ejecuta la purga explícita de la memoria caché Standby mediante llamadas nativas Win32/NT (`NtSetSystemInformation`). |
-| 📊 | **Monitoreo de RAM Completo** | Visualización en tiempo real de RAM Total, Usada, Disponible y Standby List tanto en gigabytes (GB) como en porcentaje. |
-| 🌡️ | **Monitoreo Térmico & Carga** | Lectura continua de temperatura de CPU, GPU (incluyendo Hotspot), uso de VRAM y velocidad de ventiladores (RPM). |
-| 📑 | **Dashboard de Procesos** | Panel detallado con interfaz Mica/Dark UI que presenta la lista de procesos ordenada por consumo de *Working Set*. |
-| ⚙️ | **PDH Multi-idioma** | Integración con `PdhAddEnglishCounter` para asegurar compatibilidad universal independientemente del idioma de Windows. |
+- Windows x64, compilación 19041 o posterior.
+- SDK de .NET 9 x64.
+- Herramientas de compilación para escritorio Windows y Windows SDK. También se puede abrir la solución con Visual Studio y las herramientas de WinUI instaladas.
 
----
+Desde la carpeta del proyecto:
 
-## 🛠️ Stack Tecnológico
-
-El proyecto aprovecha las tecnologías más modernas y eficientes para el desarrollo en el ecosistema Windows:
-
-### **Lenguaje & Runtime**
-- 🔷 **[C# 13](https://docs.microsoft.com/dotnet/csharp/)** — Lenguaje principal estructurado con tipado fuerte, alto rendimiento y sintaxis moderna.
-- 💜 **[.NET 9 SDK](https://dotnet.microsoft.com/)** — Framework y runtime optimizado de última generación para aplicaciones de escritorio.
-
-### **Interfaz de Usuario & Diseño**
-- 🎨 **[WinUI 3 / Windows App SDK 2.4.0](https://learn.microsoft.com/windows/apps/winui/winui3/)** — Sistema UI nativo de Windows 11 con controles Fluent Design, animación suave y efectos Mica.
-- ⚡ **[CommunityToolkit.Mvvm 8.4.2](https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/)** — Arquitectura MVVM desacoplada utilizando Source Generators (`[ObservableProperty]`, `[RelayCommand]`).
-
-### **Acceso a Hardware & Sistema**
-- 💻 **[LibreHardwareMonitorLib 0.9.6](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor)** — Biblioteca para la lectura precisa de sensores térmicos, cargas y ventiladores de CPU/GPU.
-- 🛠️ **Win32 / NT API (`Pdh.dll`, `ntdll.dll`)** — P/Invoke de bajo nivel para contadores de rendimiento y gestión de la lista de memoria del kernel Windows.
-
----
-
-## 🏗️ Arquitectura del Proyecto
-
-```text
-StandbyMemoryManager/
-├── 📂 Interop/
-│   └── NativeMethods.cs         # Definición P/Invoke de APIs Win32 y NT (NtSetSystemInformation, PDH)
-├── 📂 Models/
-│   ├── HardwareSnapshot.cs      # Estructura de datos para sensores de temperatura y carga
-│   ├── MemorySnapshot.cs        # Snapshot del estado de RAM y Standby Memory
-│   └── ProcessMemoryItem.cs     # Información de consumo por proceso (Working Set, memoria privada)
-├── 📂 Services/
-│   ├── HardwareMonitorService.cs# Lectura continua de sensores mediante LibreHardwareMonitorLib
-│   ├── MemoryService.cs         # Métricas de memoria y ejecución aislada de purga NT
-│   └── ProcessMemoryService.cs  # Diagnóstico y ordenamiento de procesos en ejecución
-├── 📂 ViewModels/
-│   └── MonitorViewModel.cs      # ViewModel central que coordina el flujo de datos y comandos MVVM
-├── 📂 Views/
-│   ├── WidgetWindow.xaml        # Interfaz compacta Always-On-Top para monitorización rápida
-│   ├── DashboardWindow.xaml     # Ventana principal de detalles, sensores y lista de procesos
-│   └── DashboardSection.cs      # Helper de navegación entre secciones del dashboard
-├── 📂 Assets/                   # Iconos de la aplicación y capturas de diseño
-├── App.xaml / App.xaml.cs       # Punto de entrada de la aplicación WinUI 3
-└── StandbyMemoryManager.csproj  # Configuración del proyecto, runtime .NET 9 y dependencias
-```
-
----
-
-## 💻 Requisitos del Sistema
-
-- 🪟 **Sistema Operativo**: Windows 11 x64 (Build 22000 o superior).
-- 🛠️ **Entorno de Desarrollo**: Visual Studio 2022 / 2026 con cargas de trabajo de *Desarrollo de escritorio C#* y *Windows App SDK*.
-- ⚙️ **SDK**: .NET 9 SDK (x64).
-- 🛡️ **Permisos de Administrador**: Necesarios si se desea ejecutar la función de limpieza de memoria Standby (`SeProfileSingleProcessPrivilege`).
-
----
-
-## ⚙️ Instalación y Ejecución
-
-### **1. Clonar el repositorio**
-```bash
-git clone https://github.com/Adan0423/MemoraX.git
-cd MemoraX
-```
-
-### **2. Opción A: Desde Visual Studio**
-1. Abre la solución `StandbyMemoryManager.sln`.
-2. Espera a que NuGet restaure los paquetes de dependencias.
-3. Selecciona la plataforma **`x64`** y compila en `Release` o `Debug`.
-4. Ejecuta la aplicación (preferiblemente como administrador).
-
-### **3. Opción B: Desde PowerShell / Terminal**
 ```powershell
-# Restaurar dependencias NuGet
-dotnet restore
-
-# Compilar proyecto para Windows x64
-dotnet build -c Release -p:Platform=x64
-
-# Ejecutar aplicación
-dotnet run -c Release --no-build -p:Platform=x64
+dotnet restore .\Veltrixa.csproj
+dotnet build .\Veltrixa.csproj -c Release -p:Platform=x64
 ```
 
-### **4. Opción C: Generar Instalador .exe y Paquete Portable (Producción)**
+En Visual Studio, abre `Veltrixa.sln`, selecciona `x64` y compila o ejecuta. Para iniciar el ejecutable compilado desde PowerShell:
+
 ```powershell
-# Ejecutar el empaquetador automático (Compila .NET, genera .zip portable y .exe con Inno Setup)
+Start-Process .\bin\x64\Release\net9.0-windows10.0.19041.0\win-x64\Veltrixa.exe -Verb RunAs
+```
+
+El manifiesto solicita privilegios de administrador al iniciar la aplicación. Estos se utilizan para la limpieza nativa y el acceso a determinados sensores; Windows muestra su solicitud de elevación correspondiente.
+
+## Crear paquetes
+
+```powershell
 .\build_installer.ps1
 ```
-*Los archivos finales se ubicarán en la carpeta `dist/`:*
-- 📦 **Instalador Ejecutable**: `dist/MemoraX_Setup_v1.0.0.exe` (Instalador completo con accesos directos y permisos de Administrador).
-- 🗜️ **Paquete Portable**: `dist/MemoraX_v1.0.0_Portable_x64.zip` (Versión autocontenida sin requerir instalación).
 
----
+El script publica una aplicación autocontenida para Windows x64 en una carpeta nueva dentro de `artifacts/publish/` y genera:
 
+- `dist/Veltrixa_v1.0.0_Portable_x64.zip`.
+- `dist/Veltrixa_Setup_v1.0.0_x64.exe`, si encuentra el compilador `ISCC.exe` de Inno Setup 6.
 
-## 🔒 Detalles Técnicos & Seguridad
+La versión se lee de `Veltrixa.csproj`. Si ya existe un paquete con el mismo nombre, el nuevo incluye una marca de tiempo; no se borran los paquetes anteriores. El script no instala herramientas en el equipo. Para generar únicamente el portable:
 
-> [!IMPORTANT]
-> **Principios de Diseño y Uso Responsable**
-> - **Acción Manual Explícita**: La limpieza de la *Standby List* requiere un clic explícito del usuario. No se realizan limpiezas automáticas ni agresivas en segundo plano.
-> - **Aislamiento en Capa NT**: La liberación de memoria se realiza a través de `MemoryService.PurgeStandby()`, invocando `NtSetSystemInformation` tras obtener `SeProfileSingleProcessPrivilege`.
-> - **Monitoreo Seguro**: La lectura de sensores es 100% pasiva y de solo lectura. No se alteran frecuencias, voltajes, BIOS ni curvas de ventilación.
-> - **Caché de Sistema**: La memoria Standby es una caché reutilizable de Windows. Se recomienda vaciarla puntualmente para diagnósticos o pruebas de rendimiento.
+```powershell
+.\build_installer.ps1 -SkipInstaller
+```
 
----
+Extrae el ZIP completo antes de abrir `Veltrixa.exe`; el ejecutable necesita los archivos que lo acompañan. El instalador permite crear un acceso directo y conserva el identificador de instalación para reconocer versiones anteriores. No configura el inicio automático con Windows.
 
-<div align="center">
-  <sub>Creado con ❤️ para la comunidad de Windows por <a href="https://github.com/Adan0423">Adan0423</a></sub>
-</div>
+## Organización del código
+
+```text
+Veltrixa.sln / Veltrixa.csproj   Solución, metadatos y dependencias
+App.xaml / App.xaml.cs          Recursos y ciclo de vida de la aplicación
+Interop/                       APIs nativas de Windows
+Models/                        Lecturas de memoria, hardware y procesos
+Services/                      Muestreo, coordinación y limpieza manual
+ViewModels/                    Estado compartido y comandos de interfaz
+Views/                         Widget y panel WinUI
+Assets/                        Iconos y recursos visuales
+build_installer.ps1             Publicación y paquetes
+installer.iss                  Definición del instalador Inno Setup
+```
+
+Dependencias fijadas: Windows App SDK `2.4.0`, CommunityToolkit.Mvvm `8.4.2` y LibreHardwareMonitorLib `0.9.6`. Las lecturas de hardware son pasivas: la aplicación no modifica frecuencias, voltajes ni curvas de ventilación. La purga se ejecuta mediante la API nativa de Windows y requiere una acción manual explícita.

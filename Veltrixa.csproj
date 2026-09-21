@@ -3,7 +3,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
-    <RootNamespace>StandbyMemoryManager</RootNamespace>
+    <RootNamespace>Veltrixa</RootNamespace>
+    <AssemblyName>Veltrixa</AssemblyName>
+    <Product>Veltrixa</Product>
+    <Title>Veltrixa</Title>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x64</Platforms>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
@@ -17,7 +20,12 @@
     <Version>1.0.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**;tools\**;artifacts\**;dist\**</DefaultItemExcludes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests\**;tools\**;artifacts\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\app_icon.ico">

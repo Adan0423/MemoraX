@@ -3,32 +3,31 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using StandbyMemoryManager.Interop;
-using StandbyMemoryManager.Services;
-using StandbyMemoryManager.ViewModels;
+using Veltrixa.Interop;
+using Veltrixa.Services;
+using Veltrixa.ViewModels;
 using Windows.Graphics;
 
-namespace StandbyMemoryManager.Views;
+namespace Veltrixa.Views;
 
 public sealed partial class WidgetWindow : Window
 {
     private readonly Action<DashboardSection> _showDashboard;
-    private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(3) };
+    private readonly MonitoringCoordinator _monitor;
     public MonitorViewModel ViewModel { get; }
 
-    public WidgetWindow(MemoryService memory, HardwareMonitorService hardware, Action<DashboardSection> showDashboard)
+    public WidgetWindow(MonitoringCoordinator monitor, Action<DashboardSection> showDashboard)
     {
-        ViewModel = new MonitorViewModel(memory, hardware);
+        _monitor = monitor;
+        ViewModel = new MonitorViewModel(((App)Application.Current).MemoryService, monitor, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
         InitializeComponent();
         _showDashboard = showDashboard;
 
         RootGrid.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(RootGrid_PointerPressed), handledEventsToo: true);
 
         ConfigureWindow();
-        _timer.Tick += async (_, _) => await ViewModel.RefreshAsync(includeHardware: true);
-        _timer.Start();
-        _ = ViewModel.RefreshAsync(includeHardware: true);
-        Closed += (_, _) => _timer.Stop();
+        _monitor.SetWidgetVisible(true);
+        Closed += (_, _) => { _monitor.SetWidgetVisible(false); ViewModel.Dispose(); };
     }
 
     private void ConfigureWindow()
@@ -36,7 +35,13 @@ public sealed partial class WidgetWindow : Window
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
         var appWindow = AppWindow.GetFromWindowId(windowId);
-        appWindow.Resize(new SizeInt32(330, 190));
+        appWindow.Changed += (_, _) =>
+        {
+            var visible = appWindow.Presenter is not OverlappedPresenter presenter ||
+                          presenter.State != OverlappedPresenterState.Minimized;
+            _monitor.SetWidgetVisible(visible);
+        };
+        appWindow.Resize(new SizeInt32(190, 82));
         try
         {
             var iconPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets", "app_icon.ico");
@@ -91,7 +96,13 @@ public sealed partial class WidgetWindow : Window
         return false;
     }
 
+    private void WidgetDragRegion_RightTapped(object sender, RightTappedRoutedEventArgs e)
+    {
+        e.Handled = false;
+    }
+
     private async void Clean_Click(object sender, RoutedEventArgs e) => await ViewModel.CleanAsync();
+    private async void Optimize_Click(object sender, RoutedEventArgs e) => await ViewModel.CleanAsync();
     private void Details_Click(object sender, RoutedEventArgs e) => _showDashboard(DashboardSection.Overview);
     private void Processes_Click(object sender, RoutedEventArgs e) => _showDashboard(DashboardSection.Processes);
 

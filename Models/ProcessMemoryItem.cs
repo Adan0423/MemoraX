@@ -1,4 +1,4 @@
-namespace StandbyMemoryManager.Models;
+namespace Veltrixa.Models;
 
 public sealed record ProcessMemoryItem(
     int Pid,

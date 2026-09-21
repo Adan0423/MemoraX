@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace StandbyMemoryManager.Interop;
+namespace Veltrixa.Interop;
 
 internal static class NativeMethods
 {

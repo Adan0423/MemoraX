@@ -1,30 +1,25 @@
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-using StandbyMemoryManager.Services;
-using StandbyMemoryManager.ViewModels;
+using Veltrixa.Services;
+using Veltrixa.ViewModels;
 using Windows.Graphics;
 
-namespace StandbyMemoryManager.Views;
+namespace Veltrixa.Views;
 
 public sealed partial class DashboardWindow : Window
 {
-    private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(3) };
+    private readonly MonitoringCoordinator _monitor;
     public MonitorViewModel ViewModel { get; }
 
-    public DashboardWindow(MemoryService memory, HardwareMonitorService hardware, ProcessMemoryService processes)
+    public DashboardWindow(MonitoringCoordinator monitor)
     {
-        ViewModel = new MonitorViewModel(memory, hardware, processes);
+        _monitor = monitor;
+        ViewModel = new MonitorViewModel(((App)Application.Current).MemoryService, monitor, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
         InitializeComponent();
         ConfigureWindow();
-
-        _timer.Tick += async (_, _) =>
-        {
-            var includeProcesses = MainTabs.SelectedIndex == 2;
-            await ViewModel.RefreshAsync(includeHardware: true, includeProcesses: includeProcesses);
-        };
-        _timer.Start();
-        _ = ViewModel.RefreshAsync(includeHardware: true, includeProcesses: false);
-        Closed += (_, _) => _timer.Stop();
+        MainTabs.SelectionChanged += (_, _) => _monitor.SetDashboardState(true, MainTabs.SelectedIndex == 2);
+        _monitor.SetDashboardState(true, false);
+        Closed += (_, _) => { _monitor.SetDashboardState(false, false); ViewModel.Dispose(); };
     }
 
     public void ShowSection(DashboardSection section)
@@ -37,7 +32,7 @@ public sealed partial class DashboardWindow : Window
             _ => 0
         };
 
-        _ = ViewModel.RefreshAsync(includeHardware: true, includeProcesses: section == DashboardSection.Processes);
+        _monitor.SetDashboardState(true, section == DashboardSection.Processes);
     }
 
     private void ConfigureWindow()
@@ -45,8 +40,14 @@ public sealed partial class DashboardWindow : Window
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
         var appWindow = AppWindow.GetFromWindowId(windowId);
-        appWindow.Resize(new SizeInt32(960, 480));
-        appWindow.Title = "MemoraX";
+        appWindow.Changed += (_, _) =>
+        {
+            var visible = appWindow.Presenter is not OverlappedPresenter presenter ||
+                          presenter.State != OverlappedPresenterState.Minimized;
+            _monitor.SetDashboardState(visible, visible && MainTabs.SelectedIndex == 2);
+        };
+        appWindow.Resize(new SizeInt32(1080, 720));
+        appWindow.Title = "Veltrixa";
         try
         {
             var iconPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Assets", "app_icon.ico");
@@ -62,4 +63,21 @@ public sealed partial class DashboardWindow : Window
     }
 
     private async void Clean_Click(object sender, RoutedEventArgs e) => await ViewModel.CleanAsync();
+
+    private void ProcessSearch_TextChanged(object sender, Microsoft.UI.Xaml.Controls.TextChangedEventArgs e) =>
+        ViewModel.FilterProcesses(((Microsoft.UI.Xaml.Controls.TextBox)sender).Text);
+
+    private void MainTabs_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e) =>
+        _monitor.SetDashboardState(true, MainTabs.SelectedIndex == 2);
+
+    private void ThemeSelector_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
+    {
+        if (ThemeSelector.SelectedItem is not Microsoft.UI.Xaml.Controls.ComboBoxItem item) return;
+        RootGrid.RequestedTheme = item.Tag?.ToString() switch
+        {
+            "Light" => ElementTheme.Light,
+            "Dark" => ElementTheme.Dark,
+            _ => ElementTheme.Default
+        };
+    }
 }

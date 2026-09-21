@@ -1,4 +1,4 @@
-namespace StandbyMemoryManager.Views;
+namespace Veltrixa.Views;
 
 public enum DashboardSection
 {
