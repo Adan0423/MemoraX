@@ -1,89 +1,111 @@
-﻿# Veltrixa
+# ⚡ Veltrixa
 
-Veltrixa es una utilidad de escritorio nativa y exclusiva para Windows x64. Permite consultar memoria RAM, sensores de hardware y procesos desde un panel y un widget flotante, y vaciar manualmente la caché Standby cuando se necesita realizar una prueba o un diagnóstico.
+> Monitor nativo de memoria y hardware para Windows, con un widget flotante compacto.
 
-La interfaz está construida con WinUI 3 y .NET 9. El proyecto se configura para Windows 10, versión 2004 (compilación 19041), o posterior, incluido Windows 11. La disponibilidad de sensores depende del equipo y sus controladores.
+[![Windows](https://img.shields.io/badge/Windows-10%202004%2B-0078D4?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+[![.NET](https://img.shields.io/badge/.NET-9-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![WinUI 3](https://img.shields.io/badge/UI-WinUI%203-00A4EF?logo=microsoft)](https://learn.microsoft.com/windows/apps/winui/winui3/)
+[![Arquitectura](https://img.shields.io/badge/arquitectura-x64-555555)](https://github.com/Adan0423/MemoraX)
 
-## Funciones
+Veltrixa es una aplicación de escritorio **exclusiva para Windows x64**. Permite consultar el uso de RAM, sensores de hardware y procesos desde un panel profesional o un widget flotante minimalista. La limpieza de la caché Standby siempre es manual y explícita.
 
-- Widget flotante compacto siempre encima; sus acciones aparecen con clic derecho para no ocupar espacio permanente.
-- Botón compacto de optimización dentro del widget para ejecutar la limpieza manual de Standby con un toque.
-- Memoria total, en uso, disponible y caché Standby con unidades y estados de lectura explícitos.
-- Temperaturas y carga de CPU y GPU, memoria gráfica y ventiladores cuando el hardware proporciona esos datos.
-- Lista de procesos por consumo de memoria, con actualización incremental.
-- Limpieza manual coordinada entre las ventanas, con progreso y resultado compartidos.
-- Temas claro, oscuro y del sistema, navegación accesible y distribución adaptable al tamaño de la ventana.
+## ✨ Funciones
 
-Standby es una caché reutilizable que **ya forma parte de la memoria disponible**. Su tamaño no representa, por sí solo, un problema ni memoria perdida. Veltrixa no realiza limpiezas automáticas ni promete acelerar el equipo. Una lectura fallida o un sensor ausente se presenta como no disponible, sin sustituirlo por un cero o por otro sensor.
+- 🧩 **Widget flotante minimalista** siempre visible, con botón de optimización y menú de funciones mediante clic derecho.
+- 🧠 **Memoria RAM** total, usada, disponible y caché Standby, con lecturas no disponibles ocultas del widget.
+- 🌡️ **Sensores** de CPU y GPU: temperatura, carga, memoria gráfica y ventiladores cuando el equipo los expone.
+- 📋 **Procesos** ordenados por consumo de memoria y actualizados de forma incremental.
+- 🧹 **Optimización manual** de la caché Standby con estado y resultado compartidos entre widget y panel.
+- 🎨 **Temas** claro, oscuro y del sistema, con una interfaz adaptable y accesible.
+- 🚀 **Bajo consumo**: consultas fuera del hilo de UI, frecuencias coordinadas y muestreo reducido cuando la app no está visible.
 
-## Monitoreo y eficiencia
+> Standby es una caché reutilizable que ya forma parte de la memoria disponible. Su tamaño no representa por sí solo un problema. Veltrixa no limpia automáticamente, no sustituye lecturas ausentes por cero y no modifica frecuencias, voltajes ni curvas de ventilación.
 
-El widget y el panel comparten un único coordinador de monitoreo. Las consultas se ejecutan fuera del hilo de interfaz y se programan según el dato y la visibilidad:
+## 🧱 Stack tecnológico
 
-| Dato | Frecuencia con la interfaz visible |
+| Capa | Tecnología |
 | --- | --- |
-| Memoria RAM | 2 segundos |
-| Sensores de hardware | 3 segundos |
-| Procesos | 5 segundos, solo en su sección visible |
-| Espacio en discos | 60 segundos, cuando se muestra en el panel |
+| Plataforma | Windows 10 2004 (build 19041) o posterior · Windows 11 |
+| Lenguaje | C# con .NET 9 |
+| Interfaz | WinUI 3 · Windows App SDK 2.4 |
+| Patrón | MVVM con CommunityToolkit.Mvvm 8.4.2 |
+| Hardware | LibreHardwareMonitorLib 0.9.6 |
+| APIs nativas | Windows interop para memoria Standby y privilegios |
+| Distribución | Publicación autocontenida `win-x64` · Inno Setup 6 |
 
-Cuando ninguna ventana está visible, el monitoreo de memoria y hardware se reduce a una consulta cada 30 segundos. Abrir o restaurar una ventana solicita datos actualizados. La limpieza es una operación única compartida: ambas ventanas reflejan el mismo estado y solo una limpieza correcta actualiza la fecha de éxito.
+## 📊 Monitoreo eficiente
 
-## Compilar y ejecutar
+El widget y el panel comparten un único `MonitoringCoordinator`. Cada consulta se ejecuta fuera del hilo de interfaz y se activa según visibilidad:
 
-Requisitos de desarrollo:
+| Lectura | Frecuencia con interfaz visible |
+| --- | --- |
+| RAM | 2 s |
+| Sensores | 3 s |
+| Procesos | 5 s, solo en la pestaña Procesos |
+| Disco | 60 s, cuando se muestra en el panel |
+
+Cuando ninguna ventana está visible, RAM y sensores pasan a una lectura cada 30 segundos. Restaurar una ventana solicita una actualización inmediata.
+
+## 🛠️ Desarrollo
+
+### Requisitos
 
 - Windows x64, compilación 19041 o posterior.
 - SDK de .NET 9 x64.
-- Herramientas de compilación para escritorio Windows y Windows SDK. También se puede abrir la solución con Visual Studio y las herramientas de WinUI instaladas.
+- Windows SDK y herramientas de escritorio de Windows.
+- Visual Studio 2022 o CLI de .NET.
 
-Desde la carpeta del proyecto:
+### Compilar
 
 ```powershell
 dotnet restore .\Veltrixa.csproj
 dotnet build .\Veltrixa.csproj -c Release -p:Platform=x64
 ```
 
-En Visual Studio, abre `Veltrixa.sln`, selecciona `x64` y compila o ejecuta. Para iniciar el ejecutable compilado desde PowerShell:
+Para ejecutar el binario compilado:
 
 ```powershell
 Start-Process .\bin\x64\Release\net9.0-windows10.0.19041.0\win-x64\Veltrixa.exe -Verb RunAs
 ```
 
-El manifiesto solicita privilegios de administrador al iniciar la aplicación. Estos se utilizan para la limpieza nativa y el acceso a determinados sensores; Windows muestra su solicitud de elevación correspondiente.
+La aplicación solicita elevación para la limpieza nativa de memoria y el acceso a determinados sensores.
 
-## Crear paquetes
+## 📦 Distribución y actualización
+
+El script publica una versión autocontenida y crea el portable y el instalador:
 
 ```powershell
 .\build_installer.ps1
 ```
 
-El script publica una aplicación autocontenida para Windows x64 en una carpeta nueva dentro de `artifacts/publish/` y genera:
+Archivos generados en `dist/`:
 
-- `dist/Veltrixa_v1.0.0_Portable_x64.zip`.
-- `dist/Veltrixa_Setup_v1.0.0_x64.exe`, si encuentra el compilador `ISCC.exe` de Inno Setup 6.
+- `Veltrixa_v1.1.0_Portable_x64.zip` — extraer todo antes de ejecutar.
+- `Veltrixa_Setup_v1.1.0_x64.exe` — instalador para Windows.
 
-La versión se lee de `Veltrixa.csproj`. Si ya existe un paquete con el mismo nombre, el nuevo incluye una marca de tiempo; no se borran los paquetes anteriores. El script no instala herramientas en el equipo. Para generar únicamente el portable:
+El instalador conserva el mismo `AppId` entre versiones, cierra Veltrixa durante la actualización y la vuelve a iniciar al terminar. Por ello, al ejecutar un Setup nuevo sobre una instalación existente, Inno Setup actualiza los archivos sin crear una segunda instalación. La versión se controla desde `Veltrixa.csproj`.
+
+Para generar solo el portable:
 
 ```powershell
 .\build_installer.ps1 -SkipInstaller
 ```
 
-Extrae el ZIP completo antes de abrir `Veltrixa.exe`; el ejecutable necesita los archivos que lo acompañan. El instalador permite crear un acceso directo y conserva el identificador de instalación para reconocer versiones anteriores. No configura el inicio automático con Windows.
-
-## Organización del código
+## 🗂️ Organización
 
 ```text
-Veltrixa.sln / Veltrixa.csproj   Solución, metadatos y dependencias
-App.xaml / App.xaml.cs          Recursos y ciclo de vida de la aplicación
-Interop/                       APIs nativas de Windows
-Models/                        Lecturas de memoria, hardware y procesos
-Services/                      Muestreo, coordinación y limpieza manual
-ViewModels/                    Estado compartido y comandos de interfaz
-Views/                         Widget y panel WinUI
-Assets/                        Iconos y recursos visuales
+Veltrixa.sln / Veltrixa.csproj   Solución y metadatos
+App.xaml / App.xaml.cs          Recursos y ciclo de vida
+Interop/                        APIs nativas de Windows
+Models/                         Modelos de memoria, hardware y procesos
+Services/                       Muestreo, coordinación y limpieza
+ViewModels/                     Estado compartido y comandos
+Views/                          Widget y panel WinUI
+Assets/                         Iconos y recursos visuales
 build_installer.ps1             Publicación y paquetes
-installer.iss                  Definición del instalador Inno Setup
+installer.iss                   Configuración de Inno Setup
 ```
 
-Dependencias fijadas: Windows App SDK `2.4.0`, CommunityToolkit.Mvvm `8.4.2` y LibreHardwareMonitorLib `0.9.6`. Las lecturas de hardware son pasivas: la aplicación no modifica frecuencias, voltajes ni curvas de ventilación. La purga se ejecuta mediante la API nativa de Windows y requiere una acción manual explícita.
+## 📄 Licencia
+
+Consulta la licencia del repositorio antes de redistribuir Veltrixa.
